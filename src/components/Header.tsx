@@ -1,0 +1,203 @@
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, Phone, Mail, MessageCircle, X } from "lucide-react";
+import { Link } from "react-router-dom";
+
+// Floating Contact Buttons Component
+const FloatingContactButtons = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const toggleMenu = () => setIsOpen(!isOpen);
+  
+  const contactMethods = [
+    {
+      name: 'WhatsApp',
+      icon: <MessageCircle className="h-5 w-5" />,
+      url: 'https://wa.me/919701876584',
+      color: 'bg-green-500 hover:bg-green-600',
+      text: 'Chat on WhatsApp'
+    },
+    {
+      name: 'Email',
+      icon: <Mail className="h-5 w-5" />,
+      url: 'mailto:info@valuemedhealthcare.com',
+      color: 'bg-red-500 hover:bg-red-600',
+      text: 'Send Email'
+    },
+    {
+      name: 'Call',
+      icon: <Phone className="h-5 w-5" />,
+      url: 'tel:+919701876584',
+      color: 'bg-blue-500 hover:bg-blue-600',
+      text: 'Call Us'
+    }
+  ];
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
+      {isOpen && (
+        <div className="flex flex-col gap-3 mb-3 items-end">
+          {contactMethods.map((method) => (
+            <a
+              key={method.name}
+              href={method.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${method.color} text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2`}
+              aria-label={method.name}
+            >
+              <span className="hidden sm:inline-block">{method.text}</span>
+              {method.icon}
+            </a>
+          ))}
+        </div>
+      )}
+      
+      <button
+        onClick={toggleMenu}
+        className={`${isOpen ? 'bg-primary' : 'bg-gradient-hero'} text-white rounded-full p-4 shadow-xl hover:shadow-2xl transition-all duration-300`}
+        aria-label={isOpen ? 'Close contact menu' : 'Contact us'}
+      >
+        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+      </button>
+    </div>
+  );
+};
+
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navigation = [
+    { name: "Home", href: "/" },
+    { name: "Core Pillars", href: "/#pillars" },
+    { name: "About Us", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Process", href: "/process" },
+    { name: "Contact", href: "/contact" },
+  ];
+
+  return (
+    <>
+      {/* Top Contact Bar */}
+      <div className="bg-primary text-primary-foreground py-2 px-4">
+        <div className="container mx-auto flex justify-between items-center text-sm">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Phone className="h-3 w-3" />
+              <span>+91-9701876584</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Mail className="h-3 w-3" />
+              <span>info@valuemedhealthcare.com</span>
+            </div>
+          </div>
+          <div className="hidden md:block">
+            <span>25+ Years of Healthcare Excellence</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <header className="bg-background/95 backdrop-blur-md border-b sticky top-0 z-50 transition-shadow duration-300 hover:shadow-md">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div>
+              <img src="/logo.jpg" alt="Medicover Logo" className="h-12 w-12 object-contain" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">ValueMed</h1>
+              <p className="text-sm text-muted-foreground">Healthcare Solutions</p>
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navigation.map((item) => {
+              const isHash = item.href.includes("#");
+              return isHash ? (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-foreground hover:text-primary transition-colors duration-200 font-medium"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-foreground hover:text-primary transition-colors duration-200 font-medium"
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <Button variant="default" className="hidden md:inline-flex bg-gradient-hero hover:opacity-90">
+              Start Your Project
+            </Button>
+
+            {/* Mobile Menu */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild className="lg:hidden">
+                <Button variant="outline" size="icon" className="relative">
+                  {isOpen ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80 p-0">
+                <div className="flex flex-col h-full">
+                  <div className="p-6 border-b">
+                    <div className="flex items-center gap-3">
+                      <img src="/logo.jpg" alt="ValueMed Logo" className="h-10 w-10 rounded-full" />
+                      <div>
+                        <h3 className="font-bold">ValueMed</h3>
+                        <p className="text-sm text-muted-foreground">Healthcare Solutions</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                    {navigation.map((item) => {
+                      const isHash = item.href.includes("#");
+                      return isHash ? (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="block py-3 px-4 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-lg font-medium"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.name}
+                        </a>
+                      ) : (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          className="block py-3 px-4 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-lg font-medium"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      );
+                    })}
+                    <Button className="mt-4 bg-gradient-hero">
+                      Start Your Project
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </header>
+      <FloatingContactButtons />
+    </>
+  );
+};
+
+export default Header;
