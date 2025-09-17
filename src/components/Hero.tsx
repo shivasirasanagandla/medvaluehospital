@@ -166,14 +166,14 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="relative container mx-auto px-4 py-20 flex items-center min-h-screen">
-        <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+        <div className="grid grid-cols-1 gap-12 items-center w-full">
           
           {/* Content Section */}
           <div className="text-white animate-slide-in-left">
             <div className="mb-6">
               <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium interactive-hover animate-pulse-glow">
                 <Sparkles className="inline h-4 w-4 mr-2" />
-                25+ Years of Healthcare Expertise
+                From Vision to Commission – Your End-to-End Hospital Consulting Partner
               </span>
             </div>
             
@@ -183,7 +183,7 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.8 }}
               className="mb-8"
             >
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
+              <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
                 Redefining Healthcare 
                 <span className="text-yellow-300 bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent animate-pulse-glow"> Excellence </span> 
                 Through Innovation
@@ -254,35 +254,15 @@ const Hero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
             >
-              <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-white text-primary hover:bg-white/90 text-lg px-6 py-6 rounded-xl shadow-medical group interactive-hover animate-bounce-gentle"
-                onClick={() => setShowQuiz(true)}
-              >
-                <Activity className="mr-2 h-5 w-5" />
-                Take Health Quiz
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              {/* Replacement label for removed buttons */}
+              <span className="inline-flex items-center gap-2 bg-white/15 text-white/95 px-4 py-3 rounded-full backdrop-blur-sm border border-white/20 text-sm md:text-base">
+                <span role="img" aria-label="start">👉</span>
+                <span className="font-medium">Start Your Healthcare Project with Us</span>
+              </span>
               
-              <Button 
-                variant="outline"
-                size="lg" 
-                className="border-gray-800 text-gray-900 hover:bg-gray-100 hover:text-gray-800 text-lg px-6 py-6 rounded-xl bg-white/90 backdrop-blur-sm group interactive-hover"
-                onClick={() => {
-                  setShowProgress(!showProgress);
-                  if (!showProgress) {
-                    setShowQuiz(false);
-                  }
-                }}
-              >
-                <BarChart2 className="mr-2 h-5 w-5" />
-                {showProgress ? 'Hide Progress' : 'View Progress'}
-              </Button>
-            </div>
-              
+              {/* Keep Learn More button */}
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -309,48 +289,10 @@ const Hero: React.FC = () => {
                 </Tooltip>
               </TooltipProvider>
             </motion.div>
+            
           </div>
 
-          {/* Service Highlights Cards */}
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="grid gap-4"
-          >
-            {highlights.map((service, index) => (
-              <TooltipProvider key={index}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                      <Card 
-                        className="bg-white backdrop-blur-md border-gray-200 p-4 hover:bg-gray-50 transition-all duration-300 group interactive-hover cursor-pointer shadow-lg"
-                        style={{
-                          '--tw-bg-opacity': '1',
-                          '--tw-border-opacity': '1',
-                          animationDelay: `${index * 0.1}s`
-                        } as React.CSSProperties}
-                      >
-                      <div className="flex items-center gap-4 text-foreground">
-                        <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors group-hover:scale-110 transform">
-                          <div className="text-primary">
-                            {service.icon}
-                          </div>
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors text-foreground">{service.title}</h3>
-                          <p className="text-muted-foreground text-sm group-hover:text-foreground transition-colors">{service.description}</p>
-                        </div>
-                        <Info className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      </div>
-                    </Card>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p className="text-sm">{service.tooltip}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-          </motion.div>
+          
           
           {/* Health Progress Tracker */}
           <AnimatePresence>

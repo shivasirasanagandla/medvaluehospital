@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, MotionValue } from "framer-motion";
+import { Building2, Settings, Award, Users, Stethoscope } from "lucide-react";
 
 type ShowcaseItem = {
   title?: string;
@@ -119,6 +120,24 @@ const HomeShowcase = () => {
   const goToNext = useCallback(() => paginate(1), [paginate]);
   const goToPrev = useCallback(() => paginate(-1), [paginate]);
 
+  // Map slide title to an icon used in the hero highlights
+  const getIconForTitle = (title?: string) => {
+    switch (title) {
+      case "Hospital Planning & Feasibility":
+        return <Building2 className="h-6 w-6 text-primary" />;
+      case "Architecture & Equipment Planning":
+        return <Settings className="h-6 w-6 text-primary" />;
+      case "Licensing & Accreditation":
+        return <Award className="h-6 w-6 text-primary" />;
+      case "Recruitment & Training":
+        return <Users className="h-6 w-6 text-primary" />;
+      case "Hospital Operations & Commissioning":
+        return <Stethoscope className="h-6 w-6 text-primary" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <section className="relative py-6 md:py-10">
       <div className="container mx-auto px-0 md:px-4">
@@ -207,29 +226,36 @@ const HomeShowcase = () => {
                           />
                         )}
                       </motion.div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      {/* Overlay service card */}
                       <motion.div 
-                        className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white"
-                        initial={{ opacity: 0, y: 20 }}
+                        className="absolute left-3 right-3 top-3 md:left-10 md:right-auto md:top-10 max-w-none md:max-w-md"
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.6 }}
+                        transition={{ delay: 0.3, duration: 0.5 }}
                       >
-                        <motion.h3 
-                          className="text-2xl md:text-4xl font-semibold tracking-tight"
-                          initial={{ x: -50, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: 0.4, duration: 0.6 }}
-                        >
-                          {item.title}
-                        </motion.h3>
-                        <motion.p 
-                          className="text-white/85 text-sm md:text-lg mt-2 max-w-3xl"
-                          initial={{ x: -50, opacity: 0 }}
-                          animate={{ x: 0, opacity: 0.85 }}
-                          transition={{ delay: 0.5, duration: 0.6 }}
-                        >
-                          {item.subtitle}
-                        </motion.p>
+                        <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/60 p-3 md:p-6">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="bg-primary/10 p-3 rounded-lg">
+                              {getIconForTitle(item.title)}
+                            </div>
+                            <h3 className="font-semibold text-base md:text-xl text-foreground">
+                              {item.title}
+                            </h3>
+                          </div>
+                          <p className="text-xs md:text-base text-muted-foreground">
+                            {item.subtitle}
+                          </p>
+                          <div className="mt-4">
+                            <Link
+                              to={item.link || "/services"}
+                              className="inline-flex items-center px-3 py-2 md:px-4 md:py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                            >
+                              Learn more
+                              <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </Link>
+                          </div>
+                        </div>
                       </motion.div>
                     </Link>
                   )}
