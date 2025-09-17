@@ -1,112 +1,111 @@
-import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
-  Building2, Heart, GraduationCap, ArrowRight, Wrench, Shield, Lightbulb, Globe, Award, Info, Sparkles, Zap, 
-  MessageCircle, Mail, Phone, X, Users, Stethoscope, Baby, AlertTriangle, Brain, Activity, BookOpen,
-  CheckCircle, CheckCircle2, Sun, TreePine, Volume2, Droplets
-} from "lucide-react";
-import hospitalImage from "@/assets/hospital-building.jpg";
-import trainingImage from "@/assets/medical-training.jpg";
-import { FloatingContactButtons } from "./FloatingContactButtons";
-import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  Building2, Heart, GraduationCap, Award, ArrowRight, Zap, Info, Sparkles,
+  Wrench, Shield, Lightbulb, Globe, Users, Stethoscope, X, MessageCircle, Mail, Phone
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+
+// Import images
+import hospitalImage from '@/assets/hospital-building.jpg';
+import trainingImage from '@/assets/medical-training.jpg';
 import buildingImage from '@/assets/consulting-work.jpg';
-import patientImage from '@/assets/hero-consulting.jpg';
 
 const CorePillars = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 100);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const openModal = (modalName: string) => setActiveModal(modalName);
   const closeModal = () => setActiveModal(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
-  const toggleMenu = () => setIsOpen(!isOpen);
-  
-  const contactMethods = [
+  const pillars = [
     {
-      name: 'WhatsApp',
-      icon: <MessageCircle className="h-5 w-5" />,
-      url: 'https://wa.me/919701876584',
-      color: 'bg-green-500 hover:bg-green-600',
-      text: 'Chat on WhatsApp'
+      id: 'building',
+      title: 'Building',
+      icon: <Building2 className="h-6 w-6" />,
+      description: 'Creating future-ready healthcare ecosystems through innovative design and construction.',
+      color: 'from-blue-500 to-cyan-400',
+      features: [
+        { icon: <Wrench className="h-5 w-5" />, text: 'Hospital Master Planning', tooltip: 'Strategic planning for healthcare facilities' },
+        { icon: <Shield className="h-5 w-5" />, text: 'Architectural Design', tooltip: 'Complete architectural solutions' },
+        { icon: <Lightbulb className="h-5 w-5" />, text: 'Engineering Integration', tooltip: 'MEP & biomedical engineering' },
+        { icon: <Globe className="h-5 w-5" />, text: 'Digital Infrastructure', tooltip: 'Modern healthcare technology' }
+      ]
     },
     {
-      name: 'Email',
-      icon: <Mail className="h-5 w-5" />,
-      url: 'mailto:info@valuemedhealthcare.com',
-      color: 'bg-red-500 hover:bg-red-600',
-      text: 'Send Email'
+      id: 'caring',
+      title: 'Caring',
+      icon: <Heart className="h-6 w-6" />,
+      description: 'Putting patients, people, and communities at the heart of healthcare.',
+      color: 'from-pink-500 to-rose-400',
+      features: [
+        { icon: <Heart className="h-5 w-5" />, text: 'Patient-Centric Design', tooltip: 'Healing-focused environments' },
+        { icon: <Shield className="h-5 w-5" />, text: 'Safety Standards', tooltip: 'Global healthcare quality' },
+        { icon: <Users className="h-5 w-5" />, text: 'Care Systems', tooltip: 'Personalized care approaches' },
+        { icon: <Globe className="h-5 w-5" />, text: 'Community Health', tooltip: 'Integrated wellbeing solutions' }
+      ]
     },
     {
-      name: 'Call',
-      icon: <Phone className="h-5 w-5" />,
-      url: 'tel:+919701876584',
-      color: 'bg-blue-500 hover:bg-blue-600',
-      text: 'Call Us'
+      id: 'education',
+      title: 'Education',
+      icon: <GraduationCap className="h-6 w-6" />,
+      description: 'Empowering healthcare professionals through continuous learning and development.',
+      color: 'from-purple-500 to-indigo-400',
+      features: [
+        { icon: <GraduationCap className="h-5 w-5" />, text: 'Medical Training', tooltip: 'Clinical skills development' },
+        { icon: <Users className="h-5 w-5" />, text: 'Team Development', tooltip: 'Leadership and teamwork' },
+        { icon: <Lightbulb className="h-5 w-5" />, text: 'Innovation', tooltip: 'Latest medical advancements' },
+        { icon: <Globe className="h-5 w-5" />, text: 'Global Standards', tooltip: 'International best practices' }
+      ]
+    },
+    {
+      id: 'excellence',
+      title: 'Excellence',
+      icon: <Award className="h-6 w-6" />,
+      description: 'Delivering exceptional quality and performance in healthcare infrastructure.',
+      color: 'from-amber-500 to-yellow-400',
+      features: [
+        { icon: <Award className="h-5 w-5" />, text: 'Quality Assurance', tooltip: 'Highest standards' },
+        { icon: <Shield className="h-5 w-5" />, text: 'Compliance', tooltip: 'Regulatory adherence' },
+        { icon: <Lightbulb className="h-5 w-5" />, text: 'Innovation', tooltip: 'Cutting-edge solutions' },
+        { icon: <Globe className="h-5 w-5" />, text: 'Sustainability', tooltip: 'Eco-friendly practices' }
+      ]
     }
   ];
 
   return (
-    <>
-      <section id="pillars" className="py-20 bg-background hospital-bg-grid relative overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-64 h-64 bg-medical-green/10 rounded-full filter blur-3xl opacity-70 animate-float-slow"></div>
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-70 animate-float"></div>
-        </div>
+    <section id="pillars" className="py-12 sm:py-16 lg:py-20 bg-background relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-20 -right-20 w-64 h-64 bg-green-500/10 rounded-full filter blur-3xl opacity-70 animate-float-slow"></div>
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-70 animate-float"></div>
+      </div>
         
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full mb-6 shadow-lg">
               <Sparkles className="h-5 w-5" />
               <span className="font-semibold">Core Foundation</span>
-            </div>
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-medical-teal to-medical-green bg-clip-text text-transparent">
-              Our Core Pillars
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Three fundamental pillars that define our approach to healthcare excellence
-            </p>
-          </div>
 
-          <div className="space-y-20">
-            {/* Building Pillar */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="animate-slide-in-left">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-primary p-4 rounded-xl animate-pulse-glow interactive-hover">
-                    <Building2 className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold flex items-center gap-2">
-                      Building
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-6 w-6 text-primary cursor-help interactive-hover" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Comprehensive healthcare infrastructure development</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </h3>
-                    <p className="text-muted-foreground">Designing the Future of Healthcare – One Facility at a Time</p>
-                  </div>
-                </div>
-                
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="group bg-gradient-to-br from-white/5 to-white/[0.03] rounded-2xl p-6 sm:p-7 lg:p-8 backdrop-blur-sm border border-white/5 hover:border-primary/20 transition-all duration-500 h-full flex flex-col hover:shadow-lg hover:shadow-primary/5">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary group-hover:scale-110 transition-transform duration-300" />
                   At Value Med, Building goes beyond construction—it means creating future-ready healthcare ecosystems. We collaborate with promoters, clinicians, and investors to design and construct facilities that are efficient, compliant, scalable, and patient-friendly.
                 </p>
 

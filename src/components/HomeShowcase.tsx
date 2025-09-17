@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, MotionValue } from "framer-motion";
-import { Building2, Settings, Award, Users, Stethoscope } from "lucide-react";
+import { Building2, Settings, Award, Users, Stethoscope, ArrowLeft, ArrowRight } from "lucide-react";
 
 type ShowcaseItem = {
   title?: string;
@@ -139,19 +139,21 @@ const HomeShowcase = () => {
   };
 
   return (
-    <section className="relative py-6 md:py-10">
-      <div className="container mx-auto px-0 md:px-4">
+    <section className="relative py-4 sm:py-6 md:py-10">
+      <div className="container mx-auto px-2 sm:px-4">
         <div 
           ref={containerRef}
-          className="relative overflow-hidden rounded-none md:rounded-2xl border bg-card shadow-medical cursor-grab active:cursor-grabbing"
+          className="relative overflow-hidden rounded-lg md:rounded-2xl border bg-card shadow-medical cursor-grab active:cursor-grabbing"
           onMouseMove={handleMouseMove}
           onMouseLeave={(e) => {
             handleMouseLeave();
             setIsHovered(false);
           }}
           onMouseEnter={() => setIsHovered(true)}
+          onTouchStart={() => setIsHovered(true)}
+          onTouchEnd={() => setIsHovered(false)}
         >
-          <div className="relative h-[60vh] md:h-[70vh] lg:h-[85vh] overflow-hidden">
+          <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] xl:h-[85vh] overflow-hidden">
             <AnimatePresence initial={false} custom={direction}>
               {items.map((item, i) => {
                 if (i !== index) return null;
@@ -195,8 +197,8 @@ const HomeShowcase = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.5, duration: 0.6 }}
                         >
-                          <h3 className="text-2xl md:text-3xl font-bold text-primary">ValueMed Healthcare Solutions</h3>
-                          <p className="text-muted-foreground mt-2">From Vision to Commission</p>
+                          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary text-center px-4">ValueMed Healthcare Solutions</h3>
+                          <p className="text-muted-foreground mt-2 text-sm sm:text-base">From Vision to Commission</p>
                         </motion.div>
                       </motion.div>
                     </div>
@@ -265,42 +267,33 @@ const HomeShowcase = () => {
             </AnimatePresence>
 
             {/* Navigation Arrows */}
-            <button 
+            <button
               onClick={goToPrev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 p-1.5 sm:p-2 rounded-full bg-background/80 backdrop-blur-sm border shadow-md hover:bg-accent transition-colors"
               aria-label="Previous slide"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m15 18-6-6 6-6" />
-              </svg>
+              <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
-            <button 
+            <button
               onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors"
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 p-1.5 sm:p-2 rounded-full bg-background/80 backdrop-blur-sm border shadow-md hover:bg-accent transition-colors"
               aria-label="Next slide"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 18 6-6-6-6" />
-              </svg>
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
 
             {/* Pagination Dots */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-              {items.map((_, i) => {
-                if (i === index) return null;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setIndex(i)}
-                    className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                      i === index 
-                        ? "bg-primary w-6" 
-                        : "bg-gray-400/50 hover:bg-gray-300"
-                    }`}
-                    aria-label={`Go to slide ${i + 1}`}
-                  />
-                );
-              })}
+            <div className="absolute bottom-3 sm:bottom-4 left-0 right-0 flex justify-center gap-1.5 sm:gap-2 z-10 px-2">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  className={`h-1.5 sm:h-2 rounded-full transition-all ${
+                    i === index ? 'w-6 bg-primary' : 'w-2 bg-muted-foreground/30'
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -310,5 +303,3 @@ const HomeShowcase = () => {
 };
 
 export default HomeShowcase;
-
-

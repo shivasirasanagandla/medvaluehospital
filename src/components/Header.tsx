@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Phone, Mail, MessageCircle, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 // Floating Contact Buttons Component
 const FloatingContactButtons = () => {
@@ -80,19 +81,20 @@ const Header = () => {
   return (
     <>
       {/* Top Contact Bar */}
-      <div className="bg-primary text-primary-foreground py-2 px-4">
-        <div className="container mx-auto flex justify-between items-center text-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Phone className="h-3 w-3" />
+      <div className="bg-primary text-primary-foreground py-1.5 sm:py-2 px-3 sm:px-4 text-xs sm:text-sm">
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4">
+          <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2 sm:gap-4">
+            <a href="tel:+919701876584" className="flex items-center gap-1.5 hover:opacity-90 transition-opacity">
+              <Phone className="h-3 w-3 flex-shrink-0" />
               <span>+91-9701876584</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail className="h-3 w-3" />
-              <span>info@valuemedhealthcare.com</span>
-            </div>
+            </a>
+            <span className="hidden xs:inline-block text-primary/50">|</span>
+            <a href="mailto:info@valuemedhealthcare.com" className="flex items-center gap-1.5 hover:opacity-90 transition-opacity">
+              <Mail className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate max-w-[180px] sm:max-w-none">info@valuemedhealthcare.com</span>
+            </a>
           </div>
-          <div className="hidden md:block">
+          <div className="hidden sm:block text-sm">
             <span>25+ Years of Healthcare Excellence</span>
           </div>
         </div>
@@ -151,43 +153,28 @@ const Header = () => {
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80 p-0">
+              <SheetContent side="right" className="w-[280px] sm:w-[350px] p-0">
                 <div className="flex flex-col h-full">
                   <div className="p-6 border-b">
-                    <div className="flex items-center gap-3">
-                      <img src="/logo.jpg" alt="ValueMed Logo" className="h-10 w-10 rounded-full" />
-                      <div>
-                        <h3 className="font-bold">ValueMed</h3>
-                        <p className="text-sm text-muted-foreground">Healthcare Solutions</p>
-                      </div>
-                    </div>
+                    <Link to="/" className="flex items-center gap-2">
+                      <img src="/logo.jpg" alt="Logo" className="h-8 w-8 rounded-full" />
+                      <span className="font-bold text-lg">ValueMed</span>
+                    </Link>
                   </div>
-                  <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                    {navigation.map((item) => {
-                      const isHash = item.href.includes("#");
-                      return isHash ? (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="block py-3 px-4 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-lg font-medium"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.name}
-                        </a>
-                      ) : (
-                        <Link
-                          key={item.name}
-                          to={item.href}
-                          className="block py-3 px-4 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-lg font-medium"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {item.name}
-                        </Link>
-                      );
-                    })}
-                    <Button asChild className="mt-4 bg-gradient-hero">
-                      <Link to="/start-building">Start Your Project</Link>
-                    </Button>
+                  <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground/90 hover:bg-accent transition-colors"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </nav>
+                  <div className="p-4 border-t">
+                    <Button className="w-full">Contact Us</Button>
                   </div>
                 </div>
               </SheetContent>

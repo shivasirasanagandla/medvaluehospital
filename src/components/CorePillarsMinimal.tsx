@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { pillars } from "@/data/pillars";
 
 const CorePillarsMinimal = () => {
+  // Desired display order for home page: Caring, Education & Training, Building
+  const order: Record<string, number> = { caring: 0, education: 1, building: 2 };
+  const displayPillars = pillars.slice().sort((a, b) => (order[a.slug] ?? 99) - (order[b.slug] ?? 99));
   return (
     <section id="pillars" className="py-16 medical-section-bg">
       <div className="container mx-auto px-4">
@@ -11,7 +14,7 @@ const CorePillarsMinimal = () => {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((p, idx) => (
+          {displayPillars.map((p, idx) => (
             <div key={p.slug} className="rounded-2xl overflow-hidden medical-card pillar-interactive flex flex-col animate-fade-in-up" style={{ animationDelay: `${80 + idx * 60}ms` }}>
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <img src={p.cardImage || p.heroImage} alt="" className="h-44 w-full object-cover" />
