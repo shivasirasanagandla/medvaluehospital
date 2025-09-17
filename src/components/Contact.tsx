@@ -3,8 +3,68 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Globe, Send, Building2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  projectType: string;
+  message: string;
+}
 
 const Contact = () => {
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    phone: "",
+    projectType: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast.success("Message sent successfully! We'll get back to you soon.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          projectType: "",
+          message: "",
+        });
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-20 bg-background medical-section-bg relative overflow-hidden">
       <div className="container mx-auto px-4">
@@ -16,7 +76,6 @@ const Contact = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          
           {/* Contact Information */}
           <div className="animate-fade-in">
             <div className="mb-8">
@@ -27,56 +86,69 @@ const Contact = () => {
             </div>
 
             <div className="space-y-6">
-              <Card className="p-6 hover:shadow-card transition-all duration-300 group">
-                <div className="flex items-start gap-4">
-                  <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
-                    <MapPin className="h-6 w-6 text-primary" />
+              <a 
+                href="https://www.google.com/maps/search/?api=1&query=Above+HDFC+Bank%2C+Kolan+Krishna+Reddy+Complex%2C+Bachupally%2C+Hyderabad+500090" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block hover:no-underline"
+              >
+                <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-primary/20">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
+                      <MapPin className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-foreground">Our Location</h4>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">
+                        Above HDFC Bank, Kolan Krishna Reddy Complex,<br />
+                        Bachupally, Hyderabad – 500090
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-lg mb-2">Our Location</h4>
-                    <p className="text-muted-foreground">
-                      Above HDFC Bank, Kolan Krishna Reddy Complex,<br />
-                      Bachupally, Hyderabad – 500090
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </a>
 
-              <Card className="p-6 hover:shadow-card transition-all duration-300 group">
-                <div className="flex items-start gap-4">
-                  <div className="bg-medical-teal/10 p-3 rounded-lg group-hover:bg-medical-teal/20 transition-colors">
-                    <Phone className="h-6 w-6 text-medical-teal" />
+              <a href="tel:+919701876584" className="block hover:no-underline">
+                <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-medical-teal/20">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-medical-teal/10 p-3 rounded-lg group-hover:bg-medical-teal/20 transition-colors">
+                      <Phone className="h-6 w-6 text-medical-teal" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-foreground">Phone</h4>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">+91-9701876584</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-lg mb-2">Phone</h4>
-                    <p className="text-muted-foreground">+91-9701876584</p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </a>
 
-              <Card className="p-6 hover:shadow-card transition-all duration-300 group">
-                <div className="flex items-start gap-4">
-                  <div className="bg-medical-green/10 p-3 rounded-lg group-hover:bg-medical-green/20 transition-colors">
-                    <Mail className="h-6 w-6 text-medical-green" />
+              <a href="mailto:info@valuemedhealthcare.com" className="block hover:no-underline">
+                <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-medical-green/20">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-medical-green/10 p-3 rounded-lg group-hover:bg-medical-green/20 transition-colors">
+                      <Mail className="h-6 w-6 text-medical-green" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-foreground">Email</h4>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">info@valuemedhealthcare.com</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-lg mb-2">Email</h4>
-                    <p className="text-muted-foreground">info@valuemedhealthcare.com</p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </a>
 
-              <Card className="p-6 hover:shadow-card transition-all duration-300 group">
-                <div className="flex items-start gap-4">
-                  <div className="bg-trust-blue/10 p-3 rounded-lg group-hover:bg-trust-blue/20 transition-colors">
-                    <Globe className="h-6 w-6 text-trust-blue" />
+              <a href="https://www.valuemedhealthcare.com" target="_blank" rel="noopener noreferrer" className="block hover:no-underline">
+                <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-trust-blue/20">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-trust-blue/10 p-3 rounded-lg group-hover:bg-trust-blue/20 transition-colors">
+                      <Globe className="h-6 w-6 text-trust-blue" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2 text-foreground">Website</h4>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">www.valuemedhealthcare.com</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-lg mb-2">Website</h4>
-                    <p className="text-muted-foreground">www.valuemedhealthcare.com</p>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </a>
             </div>
           </div>
 
@@ -95,7 +167,7 @@ const Contact = () => {
                 </p>
               </div>
 
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -103,6 +175,8 @@ const Contact = () => {
                     </label>
                     <Input 
                       id="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
                       placeholder="Enter your full name"
                       required
                       className="focus:ring-2 focus:ring-primary/20"
@@ -115,6 +189,8 @@ const Contact = () => {
                     <Input 
                       id="email"
                       type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       placeholder="Enter your email"
                       required
                       className="focus:ring-2 focus:ring-primary/20"
@@ -129,6 +205,9 @@ const Contact = () => {
                     </label>
                     <Input 
                       id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleInputChange}
                       placeholder="+91 XXXXX XXXXX"
                       className="focus:ring-2 focus:ring-primary/20"
                     />
@@ -138,7 +217,9 @@ const Contact = () => {
                       Project Type
                     </label>
                     <Input 
-                      id="project-type"
+                      id="projectType"
+                      value={formData.projectType}
+                      onChange={handleInputChange}
                       placeholder="e.g., Hospital, Clinic, Diagnostic Center"
                       className="focus:ring-2 focus:ring-primary/20"
                     />
@@ -151,6 +232,8 @@ const Contact = () => {
                   </label>
                   <Textarea 
                     id="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
                     placeholder="Tell us about your healthcare project vision, requirements, and timeline..."
                     rows={5}
                     required
@@ -162,9 +245,22 @@ const Contact = () => {
                   type="submit" 
                   size="lg" 
                   className="w-full bg-gradient-hero hover:opacity-90 text-lg group"
+                  disabled={isSubmitting}
                 >
-                  <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      Send Message
+                    </>
+                  )}
                 </Button>
               </form>
             </Card>

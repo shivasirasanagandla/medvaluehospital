@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HomeShowcase from "@/components/HomeShowcase";
-import CorePillars from "@/components/CorePillars";
+import CorePillarsMinimal from "@/components/CorePillarsMinimal";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -10,7 +10,7 @@ const Index = () => {
       <Header />
       <Hero />
       <HomeShowcase />
-      <CorePillars />
+      <CorePillarsMinimal />
       <Footer />
     </div>
   );

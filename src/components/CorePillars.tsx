@@ -2,16 +2,25 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Building2, Heart, GraduationCap, ArrowRight, Wrench, Shield, Lightbulb, Globe, Award, Info, Sparkles, Zap, 
-  MessageCircle, Mail, Phone, X, Users, Stethoscope, Baby, AlertTriangle, Brain, Activity, BookOpen
+  MessageCircle, Mail, Phone, X, Users, Stethoscope, Baby, AlertTriangle, Brain, Activity, BookOpen,
+  CheckCircle, CheckCircle2, Sun, TreePine, Volume2, Droplets
 } from "lucide-react";
 import hospitalImage from "@/assets/hospital-building.jpg";
 import trainingImage from "@/assets/medical-training.jpg";
 import { FloatingContactButtons } from "./FloatingContactButtons";
 import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Link } from 'react-router-dom';
+import buildingImage from '@/assets/consulting-work.jpg';
+import patientImage from '@/assets/hero-consulting.jpg';
 
 const CorePillars = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+
+  const openModal = (modalName: string) => setActiveModal(modalName);
+  const closeModal = () => setActiveModal(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -124,11 +133,20 @@ const CorePillars = () => {
                   ))}
                 </div>
 
-                <Button variant="outline" className="group interactive-hover animate-bounce-gentle">
-                  <Zap className="mr-2 h-4 w-4" />
-                  Learn More About Building
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <div className="flex items-center gap-3">
+                  <Button 
+                    variant="outline" 
+                    className="group interactive-hover animate-bounce-gentle"
+                    onClick={() => openModal('building')}
+                  >
+                    <Zap className="mr-2 h-4 w-4" />
+                    Quick Peek
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button asChild variant="default" className="bg-primary text-primary-foreground">
+                    <Link to="/pillars/building">Learn more</Link>
+                  </Button>
+                </div>
               </div>
               
               <div className="animate-scale-in">
@@ -199,11 +217,20 @@ const CorePillars = () => {
                   ))}
                 </div>
 
-                <Button variant="outline" className="group interactive-hover animate-bounce-gentle">
-                  <Zap className="mr-2 h-4 w-4" />
-                  Explore Caring Approach
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <div className="flex items-center gap-3">
+                  <Button 
+                    variant="outline" 
+                    className="group interactive-hover animate-bounce-gentle"
+                    onClick={() => openModal('caring')}
+                  >
+                    <Zap className="mr-2 h-4 w-4" />
+                    Quick Peek
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button asChild className="bg-medical-teal text-white">
+                    <Link to="/pillars/caring">Learn more</Link>
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -267,7 +294,11 @@ const CorePillars = () => {
                   ))}
                 </div>
 
-                <Button variant="outline" className="group interactive-hover animate-bounce-gentle border-pink-500 text-pink-500 hover:bg-pink-50">
+                <Button 
+                  variant="outline" 
+                  className="group interactive-hover animate-bounce-gentle border-pink-500 text-pink-500 hover:bg-pink-50"
+                  onClick={() => openModal('design')}
+                >
                   <Heart className="mr-2 h-4 w-4" />
                   Learn About Our Design Philosophy
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -373,11 +404,19 @@ const CorePillars = () => {
                   </div>
                 </div>
 
-                <Button className="group bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300">
-                  <GraduationCap className="mr-2 h-4 w-4" />
-                  Explore Training Programs
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <div className="flex items-center gap-3">
+                  <Button 
+                    className="group bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+                    onClick={() => openModal('training')}
+                  >
+                    <GraduationCap className="mr-2 h-4 w-4" />
+                    Quick Peek
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link to="/pillars/education">Learn more</Link>
+                  </Button>
+                </div>
               </div>
               
               <div className="animate-scale-in">
@@ -397,6 +436,257 @@ const CorePillars = () => {
         </div>
         <FloatingContactButtons />
       </section>
+
+      {/* Modals */}
+      <Dialog open={activeModal === 'building'} onOpenChange={(open) => !open && closeModal()}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">Building Excellence in Healthcare</DialogTitle>
+            <DialogDescription>
+              Comprehensive healthcare infrastructure development and management
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid md:grid-cols-2 gap-6 py-4">
+            <div className="space-y-4">
+              <img 
+                src={buildingImage} 
+                alt="Healthcare Building" 
+                className="rounded-lg w-full h-auto shadow-md"
+              />
+              <h3 className="text-xl font-semibold">Our Approach</h3>
+              <p className="text-muted-foreground">
+                We combine cutting-edge technology with evidence-based design principles to create healthcare facilities that are both functional and healing-oriented. Our approach ensures that every aspect of the facility supports optimal patient care and operational efficiency.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  <span>Comprehensive project management from concept to completion</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  <span>Integration of smart building technologies</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  <span>Sustainable and eco-friendly design solutions</span>
+                </li>
+              </ul>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Key Features</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { icon: <Building2 className="h-5 w-5" />, text: "Modular Design" },
+                    { icon: <Wrench className="h-5 w-5" />, text: "MEP Systems" },
+                    { icon: <Shield className="h-5 w-5" />, text: "Safety Standards" },
+                    { icon: <Lightbulb className="h-5 w-5" />, text: "Smart Technology" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 p-3 bg-secondary/30 rounded-lg">
+                      <div className="text-primary">{item.icon}</div>
+                      <span className="text-sm font-medium">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <h4 className="font-semibold text-blue-800 mb-2">Project Timeline</h4>
+                <div className="space-y-3">
+                  {[
+                    { phase: "Planning", duration: "4-6 weeks" },
+                    { phase: "Design", duration: "8-12 weeks" },
+                    { phase: "Approval", duration: "4-8 weeks" },
+                    { phase: "Construction", duration: "12-18 months" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex justify-between items-center pb-2 border-b border-blue-100 last:border-0">
+                      <span className="text-sm text-blue-700">{item.phase}</span>
+                      <span className="text-sm font-medium text-blue-900 bg-blue-100 px-2 py-1 rounded">{item.duration}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={activeModal === 'caring'} onOpenChange={(open) => !open && closeModal()}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-medical-teal">Our Caring Approach</DialogTitle>
+            <DialogDescription>
+              Compassionate care at the heart of everything we do
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid md:grid-cols-2 gap-6 py-4">
+            <div className="space-y-4">
+              <img 
+                src={patientImage} 
+                alt="Patient Care" 
+                className="rounded-lg w-full h-auto shadow-md"
+              />
+              <h3 className="text-xl font-semibold">Patient-Centered Care</h3>
+              <p className="text-muted-foreground">
+                Our approach to healthcare is built on the foundation of empathy, respect, and personalized attention. We believe in treating the whole person, not just the condition, and our facilities are designed to support this philosophy.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                <h4 className="font-semibold text-teal-800 mb-3">Core Principles</h4>
+                <div className="space-y-3">
+                  {[
+                    { icon: <Heart className="h-4 w-4" />, text: "Dignity and respect for all patients" },
+                    { icon: <Users className="h-4 w-4" />, text: "Family involvement in care" },
+                    { icon: <Activity className="h-4 w-4" />, text: "Holistic treatment approaches" },
+                    { icon: <Shield className="h-4 w-4" />, text: "Safe and comfortable environments" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <div className="text-teal-500 mt-0.5">{item.icon}</div>
+                      <span className="text-sm text-teal-900">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-4 bg-white rounded-lg border shadow-sm">
+                <h4 className="font-semibold mb-3">Our Commitment</h4>
+                <p className="text-sm text-muted-foreground">
+                  We are committed to creating healing environments that support both patients and their families. Our facilities incorporate natural light, soothing colors, and quiet spaces to promote recovery and well-being.
+                </p>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={activeModal === 'design'} onOpenChange={(open) => !open && closeModal()}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-pink-500">Design Philosophy</DialogTitle>
+            <DialogDescription>
+              Creating spaces that heal and inspire
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid md:grid-cols-2 gap-6 py-4">
+            <div className="space-y-4">
+              <img 
+                src="/Learn About Our Design Philosophy.png" 
+                alt="Design Philosophy" 
+                className="rounded-lg w-full h-auto shadow-md object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = patientImage;
+                  e.currentTarget.onerror = null;
+                }}
+              />
+              <h3 className="text-xl font-semibold">Healing by Design</h3>
+              <p className="text-muted-foreground">
+                Our design philosophy is rooted in evidence-based principles that create environments supporting healing, reducing stress, and improving outcomes for patients, families, and staff.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="bg-pink-50 p-4 rounded-lg border border-pink-100">
+                <h4 className="font-semibold text-pink-800 mb-3">Design Elements</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { icon: <Sun className="h-4 w-4" />, text: "Natural Light" },
+                    { icon: <TreePine className="h-4 w-4" />, text: "Biophilic Design" },
+                    { icon: <Volume2 className="h-4 w-4" />, text: "Acoustic Comfort" },
+                    { icon: <Droplets className="h-4 w-4" />, text: "Wayfinding" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="text-pink-500">{item.icon}</div>
+                      <span className="text-sm font-medium">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-4 bg-white rounded-lg border shadow-sm">
+                <h4 className="font-semibold mb-2">Design Process</h4>
+                <ol className="space-y-2 text-sm text-muted-foreground">
+                  {[
+                    "Needs Assessment",
+                    "Concept Development",
+                    "Stakeholder Review",
+                    "Design Refinement",
+                    "Implementation"
+                  ].map((step, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <span className="font-medium text-pink-500">{index + 1}.</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={activeModal === 'training'} onOpenChange={(open) => !open && closeModal()}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-purple-600">Training Programs</DialogTitle>
+            <DialogDescription>
+              Advancing healthcare through education and professional development
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid md:grid-cols-2 gap-6 py-4">
+            <div className="space-y-4">
+              <img 
+                src="/hospital training.jpg" 
+                alt="Training Programs" 
+                className="rounded-lg w-full h-auto shadow-md object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = trainingImage;
+                  e.currentTarget.onerror = null;
+                }}
+              />
+              <h3 className="text-xl font-semibold">Comprehensive Learning</h3>
+              <p className="text-muted-foreground">
+                Our training programs are designed to equip healthcare professionals with the latest knowledge and practical skills needed to excel in their fields and provide exceptional patient care.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                <h4 className="font-semibold text-purple-800 mb-3">Program Highlights</h4>
+                <ul className="space-y-3">
+                  {[
+                    "Internationally recognized certifications",
+                    "Hands-on clinical training",
+                    "Expert faculty with real-world experience",
+                    "Flexible learning options",
+                    "Career advancement opportunities"
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-purple-900">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="p-4 bg-white rounded-lg border shadow-sm">
+                <h4 className="font-semibold mb-3">Upcoming Programs</h4>
+                <div className="space-y-3">
+                  {[
+                    { name: "Advanced Cardiac Life Support", date: "October 15, 2023" },
+                    { name: "Pediatric Emergency Care", date: "November 5, 2023" },
+                    { name: "Clinical Leadership Program", date: "December 1, 2023" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-0">
+                      <div>
+                        <h5 className="font-medium text-sm">{item.name}</h5>
+                        <p className="text-xs text-muted-foreground">{item.date}</p>
+                      </div>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Register
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       {/* Floating Contact Menu */}
       {isScrolled && (

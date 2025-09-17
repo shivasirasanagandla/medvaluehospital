@@ -10,6 +10,8 @@ import ServicesPage from "./pages/ServicesPage";
 import ProcessPage from "./pages/ProcessPage";
 import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
+import StartBuilding from "./pages/StartBuilding";
+import PillarDetail from "./pages/PillarDetail";
 
 // Add smooth scroll behavior
 const SmoothScrollBehavior = () => {
@@ -34,6 +36,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/start-building" element={<StartBuilding />} />
+          <Route path="/pillars/:slug" element={<PillarDetail />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/process" element={<ProcessPage />} />

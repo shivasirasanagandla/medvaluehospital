@@ -1,3 +1,4 @@
+/* stylelint-disable at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,6 +11,7 @@ All colors MUST be HSL.
   :root {
     --background: 0 0% 98%;
     --foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -135,6 +137,18 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Hospital Patterns */
+    --pattern-dots: radial-gradient(circle at 1px 1px, hsl(var(--medical-blue) / 0.12) 1px, transparent 0);
+    --pattern-grid: linear-gradient(hsl(var(--medical-blue) / 0.08) 1px, transparent 1px), 
+                    linear-gradient(90deg, hsl(var(--medical-blue) / 0.08) 1px, transparent 1px);
+    --pattern-medical: 
+      radial-gradient(circle at 20px 20px, hsl(var(--medical-blue) / 0.08) 2px, transparent 0),
+      radial-gradient(circle at 60px 60px, hsl(var(--medical-teal) / 0.06) 1px, transparent 0),
+      linear-gradient(hsl(var(--medical-green) / 0.04) 1px, transparent 1px);
+    --pattern-hexagon: 
+      radial-gradient(circle at 25px 25px, hsl(var(--medical-blue) / 0.1) 3px, transparent 0),
+      radial-gradient(circle at 75px 75px, hsl(var(--medical-teal) / 0.08) 2px, transparent 0);
   }
 }
 
@@ -151,13 +165,15 @@ All colors MUST be HSL.
 }
 
 .hospital-bg-dots {
-  background: var(--pattern-hexagon);
-  background-size: 50px 50px, 100px 100px;
+  background: var(--pattern-dots);
+  background-size: 20px 20px;
+  background-attachment: fixed;
 }
 
 .hospital-bg-grid {
   background: var(--pattern-grid);
-  background-size: 60px 60px;
+  background-size: 40px 40px;
+  background-attachment: fixed;
 }
 
 .medical-section-bg {
@@ -180,6 +196,8 @@ All colors MUST be HSL.
   box-shadow: var(--shadow-hover);
   border-color: hsl(var(--medical-blue) / 0.3);
 }
+
+/* End of root variables */
 
 .pillar-building {
   background: var(--gradient-pillar);
@@ -287,6 +305,16 @@ All colors MUST be HSL.
   animation: gentle-appear 0.7s ease-out;
 }
 
+/* Extra: fade-in-up used in components */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
 /* Interactive hover effects */
 .interactive-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -324,16 +352,42 @@ All colors MUST be HSL.
   box-shadow: 0 25px 70px -20px hsl(var(--medical-blue) / 0.6);
 }
 
+/* Gradient backgrounds & global shadows as utility classes */
+.bg-gradient-card {
+  background: var(--gradient-card);
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-medical {
+  box-shadow: var(--shadow-medical);
+}
+
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
-    background-color: #fafafa;
-    background-image: var(--pattern-medical);
-    background-size: 40px 40px, 80px 80px, 20px 20px;
-    background-attachment: fixed;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow-x: hidden; /* prevent horizontal scroll on mobile */
+  }
+}
+
+/* Global responsive helpers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Disable fixed backgrounds on small screens to avoid iOS/Safari jank */
+@media (max-width: 768px) {
+  .hospital-bg-subtle,
+  .hospital-bg-dots,
+  .hospital-bg-grid {
+    background-attachment: scroll !important;
   }
 }

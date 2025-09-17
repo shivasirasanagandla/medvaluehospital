@@ -136,8 +136,8 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button variant="default" className="hidden md:inline-flex bg-gradient-hero hover:opacity-90">
-              Start Your Project
+            <Button asChild variant="default" className="hidden md:inline-flex bg-gradient-hero hover:opacity-90">
+              <Link to="/start-building">Start Your Project</Link>
             </Button>
 
             {/* Mobile Menu */}
@@ -185,8 +185,8 @@ const Header = () => {
                         </Link>
                       );
                     })}
-                    <Button className="mt-4 bg-gradient-hero">
-                      Start Your Project
+                    <Button asChild className="mt-4 bg-gradient-hero">
+                      <Link to="/start-building">Start Your Project</Link>
                     </Button>
                   </div>
                 </div>
