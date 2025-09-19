@@ -45,7 +45,8 @@ const App = () => (
       <SmoothScrollBehavior />
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
+        <div className="min-h-screen w-full overflow-x-hidden">
+          <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/start-building" element={<StartBuilding />} />
           <Route path="/pillars/:slug" element={<PillarDetail />} />
@@ -54,8 +55,9 @@ const App = () => (
           <Route path="/process" element={<ProcessPage />} />
           <Route path="/contact" element={<ContactPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

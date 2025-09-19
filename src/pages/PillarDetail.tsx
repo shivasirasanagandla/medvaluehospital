@@ -152,7 +152,7 @@ const PillarDetail = () => {
                 <button onClick={() => setOpen(true)} className="rounded-md border px-4 py-2 hover:bg-accent">
                   Quick Peek
                 </button>
-                <Link to="/start-building" className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">Start Your Project</Link>
+                <Link to="/contact" className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">Start Your Project</Link>
                 <a href="/#pillars" className="rounded-md border px-4 py-2 hover:bg-accent">Back to Pillars</a>
               </div>
               {pillar.slug === "caring" && (

@@ -2,9 +2,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Globe, Send, Building2 } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Send, Building2, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import GoogleMap from "./GoogleMap";
+
+// Address for ValueMed Healthcare
+const ADDRESS = "Above HDFC Bank, Kolan Krishna Reddy Complex, Bachupally, Hyderabad – 500090";
 
 interface FormData {
   name: string;
@@ -66,16 +70,18 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-background medical-section-bg relative overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Let's Build the Future of Healthcare – Together</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+    <section id="contact" className="min-h-screen py-12 md:py-20 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 px-4">
+            Let's Build the Future of Healthcare – Together
+          </h2>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
             Ready to transform your healthcare vision into reality? Get in touch with our expert consultants today.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start relative z-10">
           {/* Contact Information */}
           <div className="animate-fade-in">
             <div className="mb-8">
@@ -86,27 +92,35 @@ const Contact = () => {
             </div>
 
             <div className="space-y-6">
-              <a 
-                href="https://www.google.com/maps/search/?api=1&query=Above+HDFC+Bank%2C+Kolan+Krishna+Reddy+Complex%2C+Bachupally%2C+Hyderabad+500090" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block hover:no-underline"
-              >
-                <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-primary/20">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
-                      <MapPin className="h-6 w-6 text-primary" />
+              <div className="space-y-4">
+                <a 
+                  href={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block hover:no-underline"
+                >
+                  <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-primary/20">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-primary/10 p-2 sm:p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
+                        <MapPin className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start">
+                          <h4 className="font-semibold text-lg mb-2 text-foreground">Our Location</h4>
+                          <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors mt-1" />
+                        </div>
+                        <p className="text-muted-foreground group-hover:text-foreground transition-colors">
+                          {ADDRESS}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-lg mb-2 text-foreground">Our Location</h4>
-                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">
-                        Above HDFC Bank, Kolan Krishna Reddy Complex,<br />
-                        Bachupally, Hyderabad – 500090
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </a>
+                  </Card>
+                </a>
+                {/* Map */}
+                <div className="overflow-hidden rounded-lg border shadow-sm h-64 md:h-80">
+                  <GoogleMap className="w-full h-full" />
+                </div>
+              </div>
 
               <a href="tel:+919701876584" className="block hover:no-underline">
                 <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-medical-teal/20">

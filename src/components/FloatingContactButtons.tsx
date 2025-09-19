@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, Phone, Mail, X, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const FloatingContactButtons = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,13 +75,13 @@ export const FloatingContactButtons = () => {
 
       {/* Get a Quote Floating Button */}
       <div className="fixed bottom-6 left-6 z-50">
-        <a 
-          href="/contact"
+        <Link 
+          to="/contact"
           className="inline-flex items-center justify-center bg-gradient-to-r from-primary to-medical-teal text-white font-medium rounded-full px-6 py-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group"
         >
           <span className="mr-2">Get a Free Quote</span>
           <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-        </a>
+        </Link>
       </div>
     </>
   );
