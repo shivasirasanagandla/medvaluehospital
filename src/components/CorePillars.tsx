@@ -32,10 +32,10 @@ const getIconComponent = (iconName: string) => {
   return iconMap[iconName.toLowerCase()] || <Check className="h-4 w-4" />;
 };
 
-const CorePillars = () => {
-  const navigate = useNavigate();
+const CorePillars: React.FC = () => {
   const [expandedPillar, setExpandedPillar] = useState<string | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const navigate = useNavigate();
 
   const togglePillar = (pillarId: string) => {
     setExpandedPillar(expandedPillar === pillarId ? null : pillarId);
@@ -143,14 +143,14 @@ const CorePillars = () => {
     switch(pillarSlug) {
       case 'caring':
         // Open Valuemed Clinics in a new tab
-        window.open('https://valuemedclinics.com', '_blank');
+        window.open('https://valuemedclinics.com', '_blank', 'noopener,noreferrer');
         break;
         
       case 'education':
       case 'building':
         // Navigate to contact page with smooth scroll
         if (window.location.pathname !== '/contact') {
-          window.location.href = '/contact';
+          navigate('/contact');
         } else {
           // If already on contact page, scroll to contact form
           const contactSection = document.getElementById('contact');
@@ -162,12 +162,12 @@ const CorePillars = () => {
         
       default:
         // Default navigation for any other cases
-        window.location.href = '/contact';
+        navigate('/contact');
     }
   };
 
   return (
-    <section id="pillars" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-background to-gray-50/50 relative overflow-hidden">
+    <section id="pillars" className="pt-6 sm:pt-10 md:pt-12 lg:pt-16 pb-12 sm:pb-16 md:pb-20 lg:pb-24 bg-gradient-to-b from-background to-gray-50/50 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-green-500/5 rounded-full filter blur-3xl opacity-70 animate-float-slow"></div>
@@ -206,7 +206,7 @@ const CorePillars = () => {
           </motion.p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
           {orderedPillars.map((pillar, index) => {
             const config = pillarConfig[pillar.slug as keyof typeof pillarConfig] || {
               bgColor: 'bg-primary',
@@ -224,7 +224,7 @@ const CorePillars = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="group bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl hover:border-transparent flex flex-col h-full"
+                className="group bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl hover:border-transparent flex flex-col h-full mx-2 sm:mx-0"
               >
                 {/* Card Image */}
                 <div className="h-48 overflow-hidden">

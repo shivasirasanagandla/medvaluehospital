@@ -45,7 +45,7 @@ const App = () => (
       <SmoothScrollBehavior />
       <BrowserRouter>
         <ScrollToTop />
-        <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-blue-50 via-white to-teal-50 relative">
+        <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-gradient-to-br from-blue-50 via-white to-teal-50 relative md:flex md:flex-col md:justify-center md:items-center">
           {/* Subtle background pattern */}
           <div 
             className="fixed inset-0 z-0 opacity-20 pointer-events-none"
@@ -66,7 +66,7 @@ const App = () => (
             }}
           />
           {/* Main content wrapper */}
-          <div className="relative z-10 w-full max-w-[100vw] overflow-x-hidden">
+          <div className="relative z-10 w-full max-w-[100vw] overflow-x-hidden min-h-[calc(100vh-80px)]">
           <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/start-building" element={<StartBuilding />} />
