@@ -7,7 +7,7 @@ import heroImage from "@/assets/hero-consulting.jpg";
 const Hero: React.FC = () => {
 
   return (
-    <section id="home" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 bg-gradient-hero overflow-hidden">
+    <section id="home" className="relative py-8 sm:py-10 md:py-12 lg:py-16 xl:py-20 bg-gradient-hero overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <img 
@@ -44,30 +44,6 @@ const Hero: React.FC = () => {
               </p>
             </motion.div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 sm:mt-8 flex flex-col xs:flex-row flex-wrap gap-3 sm:gap-4 items-start xs:items-center"
-            >
-              <Button 
-                className="w-full xs:w-auto inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all hover:scale-105 shadow-md hover:shadow-teal-500/20"
-                onClick={() => window.location.href = '#contact'}
-              >
-                <span role="img" aria-label="start" className="text-base sm:text-lg">👉</span>
-                Start Your Healthcare Project
-              </Button>
-              
-              <a 
-                href="https://valuemedclinics.com" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full xs:w-auto inline-flex items-center justify-center gap-2 bg-white text-gray-800 hover:bg-gray-100 px-4 py-2 rounded-md text-sm font-medium transition-all shadow-sm border border-gray-200 hover:shadow-md"
-              >
-                Learn More
-                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </motion.div>
           </div>
         </div>
       </div>

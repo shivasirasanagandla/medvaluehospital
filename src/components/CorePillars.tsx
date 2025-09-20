@@ -1,723 +1,390 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
-  Building2, Heart, GraduationCap, Award, ArrowRight, Zap, Info, Sparkles,
-  Wrench, Shield, Lightbulb, Globe, Users, Stethoscope, X, MessageCircle, Mail, Phone
+  Building2, Heart, GraduationCap, Award, ChevronDown, ChevronUp, X, ArrowRight,
+  Wrench, Shield, Lightbulb, Globe, Users, CheckCircle, MessageCircle, Mail, Phone, Activity,
+  Map, Cpu, Stethoscope, Book, Sun, Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { pillars } from '@/data/pillars';
 
-// Import images
-import hospitalImage from '@/assets/hospital-building.jpg';
-import trainingImage from '@/assets/medical-training.jpg';
-import buildingImage from '@/assets/consulting-work.jpg';
+// Utility function to get icon component based on icon name
+const getIconComponent = (iconName: string) => {
+  const iconMap: { [key: string]: React.ReactNode } = {
+    wrench: <Wrench className="h-4 w-4" />,
+    shield: <Shield className="h-4 w-4" />,
+    lightbulb: <Lightbulb className="h-4 w-4" />,
+    globe: <Globe className="h-4 w-4" />,
+    users: <Users className="h-4 w-4" />,
+    message: <MessageCircle className="h-4 w-4" />,
+    mail: <Mail className="h-4 w-4" />,
+    phone: <Phone className="h-4 w-4" />,
+    activity: <Activity className="h-4 w-4" />,
+    map: <Map className="h-4 w-4" />,
+    cpu: <Cpu className="h-4 w-4" />,
+    stethoscope: <Stethoscope className="h-4 w-4" />,
+    book: <Book className="h-4 w-4" />,
+    sun: <Sun className="h-4 w-4" />,
+    check: <Check className="h-4 w-4" />
+  };
+  
+  return iconMap[iconName.toLowerCase()] || <Check className="h-4 w-4" />;
+};
 
 const CorePillars = () => {
-  const [activeModal, setActiveModal] = useState<string | null>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const [expandedPillar, setExpandedPillar] = useState<string | null>(null);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 100);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const togglePillar = (pillarId: string) => {
+    setExpandedPillar(expandedPillar === pillarId ? null : pillarId);
+  };
 
-  const openModal = (modalName: string) => setActiveModal(modalName);
-  const closeModal = () => setActiveModal(null);
+  const toggleContact = () => {
+    setIsContactOpen(!isContactOpen);
+  };
 
-  const pillars = [
-    {
-      id: 'building',
-      title: 'Building',
-      icon: <Building2 className="h-6 w-6" />,
-      description: 'Creating future-ready healthcare ecosystems through innovative design and construction.',
-      color: 'from-blue-500 to-cyan-400',
-      features: [
-        { icon: <Wrench className="h-5 w-5" />, text: 'Hospital Master Planning', tooltip: 'Strategic planning for healthcare facilities' },
-        { icon: <Shield className="h-5 w-5" />, text: 'Architectural Design', tooltip: 'Complete architectural solutions' },
-        { icon: <Lightbulb className="h-5 w-5" />, text: 'Engineering Integration', tooltip: 'MEP & biomedical engineering' },
-        { icon: <Globe className="h-5 w-5" />, text: 'Digital Infrastructure', tooltip: 'Modern healthcare technology' }
-      ]
+  const getPillarColor = (pillarSlug: string) => {
+    switch (pillarSlug) {
+      case 'building':
+        return 'bg-gradient-to-br from-blue-500 to-cyan-500';
+      case 'caring':
+        return 'bg-gradient-to-br from-pink-500 to-rose-500';
+      case 'education':
+        return 'bg-gradient-to-br from-purple-500 to-indigo-500';
+      case 'excellence':
+        return 'bg-gradient-to-br from-amber-500 to-yellow-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
+  const getIconComponent = (iconName: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      'map': <Map className="h-5 w-5" />,
+      'wrench': <Wrench className="h-5 w-5" />,
+      'cpu': <Cpu className="h-5 w-5" />,
+      'shield': <Shield className="h-5 w-5" />,
+      'stethoscope': <Stethoscope className="h-5 w-5" />,
+      'book': <Book className="h-5 w-5" />,
+      'sun': <Sun className="h-5 w-5" />,
+      'users': <Users className="h-5 w-5" />,
+      'check': <Check className="h-5 w-5" />,
+      'activity': <Activity className="h-5 w-5" />,
+      'heart': <Heart className="h-5 w-5" />,
+      'graduation-cap': <GraduationCap className="h-5 w-5" />,
+      'award': <Award className="h-5 w-5" />,
+      'lightbulb': <Lightbulb className="h-5 w-5" />,
+      'globe': <Globe className="h-5 w-5" />
+    };
+    return iconMap[iconName] || <CheckCircle className="h-5 w-5" />;
+  };
+
+  const contactMethods = [
+    { 
+      name: 'Email', 
+      icon: <Mail className="h-5 w-5" />, 
+      url: 'mailto:info@valuemedhealthcare.com',
+      color: 'bg-blue-500 hover:bg-blue-600',
+      text: 'Email Us'
     },
-    {
-      id: 'caring',
-      title: 'Caring',
-      icon: <Heart className="h-6 w-6" />,
-      description: 'Putting patients, people, and communities at the heart of healthcare.',
-      color: 'from-pink-500 to-rose-400',
-      features: [
-        { icon: <Heart className="h-5 w-5" />, text: 'Patient-Centric Design', tooltip: 'Healing-focused environments' },
-        { icon: <Shield className="h-5 w-5" />, text: 'Safety Standards', tooltip: 'Global healthcare quality' },
-        { icon: <Users className="h-5 w-5" />, text: 'Care Systems', tooltip: 'Personalized care approaches' },
-        { icon: <Globe className="h-5 w-5" />, text: 'Community Health', tooltip: 'Integrated wellbeing solutions' }
-      ]
+    { 
+      name: 'Call', 
+      icon: <Phone className="h-5 w-5" />, 
+      url: 'tel:+919701876584',
+      color: 'bg-green-500 hover:bg-green-600',
+      text: 'Call Us'
     },
-    {
-      id: 'education',
-      title: 'Education',
-      icon: <GraduationCap className="h-6 w-6" />,
-      description: 'Empowering healthcare professionals through continuous learning and development.',
-      color: 'from-purple-500 to-indigo-400',
-      features: [
-        { icon: <GraduationCap className="h-5 w-5" />, text: 'Medical Training', tooltip: 'Clinical skills development' },
-        { icon: <Users className="h-5 w-5" />, text: 'Team Development', tooltip: 'Leadership and teamwork' },
-        { icon: <Lightbulb className="h-5 w-5" />, text: 'Innovation', tooltip: 'Latest medical advancements' },
-        { icon: <Globe className="h-5 w-5" />, text: 'Global Standards', tooltip: 'International best practices' }
-      ]
-    },
-    {
-      id: 'excellence',
-      title: 'Excellence',
-      icon: <Award className="h-6 w-6" />,
-      description: 'Delivering exceptional quality and performance in healthcare infrastructure.',
-      color: 'from-amber-500 to-yellow-400',
-      features: [
-        { icon: <Award className="h-5 w-5" />, text: 'Quality Assurance', tooltip: 'Highest standards' },
-        { icon: <Shield className="h-5 w-5" />, text: 'Compliance', tooltip: 'Regulatory adherence' },
-        { icon: <Lightbulb className="h-5 w-5" />, text: 'Innovation', tooltip: 'Cutting-edge solutions' },
-        { icon: <Globe className="h-5 w-5" />, text: 'Sustainability', tooltip: 'Eco-friendly practices' }
-      ]
+    { 
+      name: 'WhatsApp', 
+      icon: <MessageCircle className="h-5 w-5" />, 
+      url: 'https://wa.me/919701876584',
+      color: 'bg-green-600 hover:bg-green-700',
+      text: 'WhatsApp'
     }
   ];
 
+  // Reorder pillars: Caring, Education, Building
+  const orderedPillars = [...pillars].sort((a, b) => {
+    const order = { 'caring': 1, 'education': 2, 'building': 3 };
+    return (order[a.slug as keyof typeof order] || 99) - (order[b.slug as keyof typeof order] || 99);
+  });
+
+  // Color and image mapping for each pillar
+  const pillarConfig = {
+    'caring': {
+      bgColor: 'bg-pink-500',
+      textColor: 'text-pink-500',
+      image: '/patient care.jpg',
+      alt: 'Patient Care Services'
+    },
+    'education': {
+      bgColor: 'bg-blue-500',
+      textColor: 'text-blue-500',
+      image: '/hospital training.jpg',
+      alt: 'Medical Education & Training'
+    },
+    'building': {
+      bgColor: 'bg-green-500',
+      textColor: 'text-green-500',
+      image: '/hospital planning and feasibility.jpg',
+      alt: 'Hospital Planning & Building'
+    },
+    'excellence': {
+      bgColor: 'bg-purple-500',
+      textColor: 'text-purple-500',
+      image: '/Hospital Operations & Commissioning.jpg',
+      alt: 'Healthcare Excellence'
+    }
+  };
+
+  const handleGetStarted = (pillarSlug: string) => {
+    switch(pillarSlug) {
+      case 'caring':
+        // Open Valuemed Clinics in a new tab
+        window.open('https://valuemedclinics.com', '_blank');
+        break;
+        
+      case 'education':
+      case 'building':
+        // Navigate to contact page with smooth scroll
+        if (window.location.pathname !== '/contact') {
+          window.location.href = '/contact';
+        } else {
+          // If already on contact page, scroll to contact form
+          const contactSection = document.getElementById('contact');
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+        break;
+        
+      default:
+        // Default navigation for any other cases
+        window.location.href = '/contact';
+    }
+  };
+
   return (
-    <section id="pillars" className="py-12 sm:py-16 lg:py-20 bg-background relative overflow-hidden">
+    <section id="pillars" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-background to-gray-50/50 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-green-500/10 rounded-full filter blur-3xl opacity-70 animate-float-slow"></div>
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-70 animate-float"></div>
+        <div className="absolute -top-20 -right-20 w-96 h-96 bg-green-500/5 rounded-full filter blur-3xl opacity-70 animate-float-slow"></div>
+        <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-primary/5 rounded-full filter blur-3xl opacity-70 animate-float"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full filter blur-3xl opacity-30"></div>
       </div>
-        
-        <div className="container mx-auto px-4 relative">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full mb-6 shadow-lg">
-              <Sparkles className="h-5 w-5" />
-              <span className="font-semibold">Core Foundation</span>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          <div className="group bg-gradient-to-br from-white/5 to-white/[0.03] rounded-2xl p-6 sm:p-7 lg:p-8 backdrop-blur-sm border border-white/5 hover:border-primary/20 transition-all duration-500 h-full flex flex-col hover:shadow-lg hover:shadow-primary/5">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary group-hover:scale-110 transition-transform duration-300" />
-                  At Value Med, Building goes beyond construction—it means creating future-ready healthcare ecosystems. We collaborate with promoters, clinicians, and investors to design and construct facilities that are efficient, compliant, scalable, and patient-friendly.
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-4 mb-8">
-                  {[
-                    { icon: <Wrench className="h-5 w-5" />, text: "Hospital Master Planning & Concept Design", tooltip: "Strategic planning and conceptual design for optimal healthcare facility layouts" },
-                    { icon: <Shield className="h-5 w-5" />, text: "Architectural Design & Engineering", tooltip: "Complete architectural and engineering solutions for healthcare facilities" },
-                    { icon: <Lightbulb className="h-5 w-5" />, text: "MEP & Biomedical Engineering Integration", tooltip: "Mechanical, Electrical, Plumbing and biomedical equipment integration" },
-                    { icon: <Globe className="h-5 w-5" />, text: "Digital Health Infrastructure", tooltip: "Modern digital infrastructure for healthcare technology integration" }
-                  ].map((item, index) => (
-                    <TooltipProvider key={index}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg interactive-hover medical-card cursor-pointer group">
-                            <div className="text-primary group-hover:scale-110 transition-transform">{item.icon}</div>
-                            <span className="text-sm text-muted-foreground group-hover:text-primary transition-colors">{item.text}</span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-sm">{item.tooltip}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Button 
-                    variant="outline" 
-                    className="group interactive-hover animate-bounce-gentle"
-                    onClick={() => openModal('building')}
-                  >
-                    <Zap className="mr-2 h-4 w-4" />
-                    Quick Peek
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                  <Button asChild variant="default" className="bg-primary text-primary-foreground">
-                    <Link to="/pillars/building">Learn more</Link>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="animate-scale-in">
-                <img 
-                  src={hospitalImage} 
-                  alt="Hospital Building" 
-                  className="rounded-2xl shadow-medical w-full"
-                />
-              </div>
-            </div>
-
-            {/* Caring Pillar */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="order-last lg:order-first animate-scale-in h-full">
-                <img 
-                  src="/patient care.jpg" 
-                  alt="Patient-Centric Healthcare" 
-                  className="rounded-2xl shadow-medical w-full h-full object-cover"
-                />
-              </div>
-              <div className="animate-slide-in-right">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-medical-teal p-4 rounded-xl animate-pulse-glow interactive-hover">
-                    <Heart className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold flex items-center gap-2">
-                      🤝 Caring
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-6 w-6 text-medical-teal cursor-help interactive-hover" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Putting Patients, People, and Communities at the Heart of Healthcare</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </h3>
-                    <p className="text-muted-foreground">Healing-focused, compassionate healthcare environments</p>
-                  </div>
-                </div>
-                
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  We believe that healthcare infrastructure must be compassionate, inclusive, and healing-focused. Our Caring pillar ensures that both clinical systems and human interactions prioritize patient well-being and staff satisfaction. At Value Med, care is strategic—we help you build healthcare institutions that treat people, not just conditions.
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-4 mb-8">
-                  {[
-                    { icon: <Heart className="h-5 w-5" />, text: "Patient-Centric Design", tooltip: "Designing spaces centered on patient comfort and healing" },
-                    { icon: <Shield className="h-5 w-5" />, text: "Global Safety Standards", tooltip: "Implementing international healthcare quality standards" },
-                    { icon: <Users className="h-5 w-5" />, text: "Humanized Care Systems", tooltip: "Personalized care approaches for better outcomes" },
-                    { icon: <Globe className="h-5 w-5" />, text: "Community Integration", tooltip: "Connecting healthcare with community wellbeing" }
-                  ].map((item, index) => (
-                    <TooltipProvider key={`caring-${index}`}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg interactive-hover medical-card cursor-pointer group">
-                            <div className="text-medical-teal group-hover:scale-110 transition-transform">{item.icon}</div>
-                            <span className="text-sm text-muted-foreground group-hover:text-medical-teal transition-colors">{item.text}</span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-sm">{item.tooltip}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Button 
-                    variant="outline" 
-                    className="group interactive-hover animate-bounce-gentle"
-                    onClick={() => openModal('caring')}
-                  >
-                    <Zap className="mr-2 h-4 w-4" />
-                    Quick Peek
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                  <Button asChild className="bg-medical-teal text-white">
-                    <Link to="/pillars/caring">Learn more</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Patient-Centric Design */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="order-last lg:order-first animate-scale-in">
-                <img 
-                  src="/Patient-Centric Design.jpeg" 
-                  alt="Patient-Centric Design" 
-                  className="rounded-2xl shadow-medical w-full h-auto"
-                />
-              </div>
-              
-              <div className="animate-slide-in-right">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-pink-500 to-rose-500 p-4 rounded-xl animate-pulse-glow interactive-hover">
-                    <Heart className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold flex items-center gap-2">
-                      Patient-Centric Design
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-6 w-6 text-pink-500 cursor-help interactive-hover" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Designing healthcare experiences around patient needs</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </h3>
-                    <p className="text-muted-foreground">Putting Patients at the Heart of Healthcare Design</p>
-                  </div>
-                </div>
-                
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  We believe in creating healthcare environments that prioritize patient comfort, dignity, and healing. Our patient-centric approach ensures that every aspect of the healthcare journey is designed with the patient's needs and experiences in mind.
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-4 mb-8">
-                  {[
-                    { icon: <Heart className="h-5 w-5" />, text: "Wayfinding & Signage", tooltip: "Intuitive navigation systems for stress-free movement" },
-                    { icon: <Users className="h-5 w-5" />, text: "Family Zones", tooltip: "Comfortable spaces for family members" },
-                    { icon: <Activity className="h-5 w-5" />, text: "Healing Environment", tooltip: "Design elements that promote recovery" },
-                    { icon: <Lightbulb className="h-5 w-5" />, text: "Accessibility", tooltip: "Universal design for all patients" }
-                  ].map((item, index) => (
-                    <TooltipProvider key={`design-${index}`}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg interactive-hover medical-card cursor-pointer group">
-                            <div className="text-pink-500 group-hover:scale-110 transition-transform">{item.icon}</div>
-                            <span className="text-sm text-muted-foreground group-hover:text-pink-500 transition-colors">{item.text}</span>
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-sm">{item.tooltip}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
-
-                <Button 
-                  variant="outline" 
-                  className="group interactive-hover animate-bounce-gentle border-pink-500 text-pink-500 hover:bg-pink-50"
-                  onClick={() => openModal('design')}
-                >
-                  <Heart className="mr-2 h-4 w-4" />
-                  Learn About Our Design Philosophy
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Education & Training */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="animate-slide-in-left">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-purple-500 to-blue-500 p-4 rounded-xl animate-pulse-glow interactive-hover">
-                    <GraduationCap className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold flex items-center gap-2">
-                      Education & Training
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-6 w-6 text-purple-500 cursor-help interactive-hover" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Comprehensive healthcare professional development</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </h3>
-                    <p className="text-muted-foreground">Empowering Healthcare Professionals Through Continuous Learning</p>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-2xl shadow-medical p-6 mb-8">
-                  <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    We provide world-class education and upskilling pathways for healthcare professionals at all levels—equipping them with the competencies to thrive in modern, evidence-based clinical environments.
-                  </p>
-                  
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                      <BookOpen className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <h4 className="text-xl font-semibold text-gray-800">Postgraduate Medical Pathways (Beyond NEET-PG)</h4>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[
-                      { 
-                        text: "MRCP (UK)", 
-                        description: "Membership of the Royal College of Physicians",
-                        details: "Comprehensive training in internal medicine and its subspecialties, recognized worldwide."
-                      },
-                      { 
-                        text: "MRCS (UK)", 
-                        description: "Membership of the Royal College of Surgeons",
-                        details: "Surgical training program covering core knowledge and clinical skills in surgery."
-                      },
-                      { 
-                        text: "MRCOG", 
-                        description: "Obstetrics and Gynaecology",
-                        details: "Specialized training in women's health, pregnancy, childbirth, and reproductive health."
-                      },
-                      { 
-                        text: "MRCPCh", 
-                        description: "Paediatrics",
-                        details: "Focused on child healthcare from birth to adolescence, covering all aspects of medical care."
-                      },
-                      { 
-                        text: "MRCEM", 
-                        description: "Emergency Medicine",
-                        details: "Training in acute care, trauma management, and emergency medical conditions."
-                      },
-                      { 
-                        text: "MRCPsych", 
-                        description: "Psychiatry",
-                        details: "Specialized training in mental health, psychological disorders, and psychiatric care."
-                      },
-                      { 
-                        text: "FRCR", 
-                        description: "Clinical Radiology & Oncology",
-                        details: "Advanced training in diagnostic imaging and radiation oncology."
-                      },
-                      { 
-                        text: "FRCEM", 
-                        description: "Fellowship of the Royal College of Emergency Medicine",
-                        details: "Advanced training in emergency medicine and acute care."
-                      }
-                    ].map((item, index) => (
-                      <TooltipProvider key={`training-${index}`}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="bg-white p-4 rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer group">
-                              <div className="text-lg font-semibold text-purple-600 mb-1 group-hover:text-purple-700">{item.text}</div>
-                              <div className="text-sm text-gray-600">{item.description}</div>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs p-4 bg-white shadow-lg rounded-lg border border-gray-200">
-                            <h4 className="font-semibold text-purple-700 mb-2">{item.text}</h4>
-                            <p className="text-sm text-gray-700">{item.details}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Button 
-                    className="group bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
-                    onClick={() => openModal('training')}
-                  >
-                    <GraduationCap className="mr-2 h-4 w-4" />
-                    Quick Peek
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                  <Button asChild variant="outline">
-                    <Link to="/pillars/education">Learn more</Link>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="animate-scale-in">
-                <img 
-                  src="/medical-training.jpg" 
-                  alt="Education & Training" 
-                  className="rounded-2xl shadow-medical w-full h-full object-cover"
-                  onError={(e) => {
-                    // Fallback to the asset if the public image is not found
-                    e.currentTarget.src = trainingImage;
-                    e.currentTarget.onerror = null;
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <FloatingContactButtons />
-      </section>
-
-      {/* Modals */}
-      <Dialog open={activeModal === 'building'} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-primary">Building Excellence in Healthcare</DialogTitle>
-            <DialogDescription>
-              Comprehensive healthcare infrastructure development and management
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid md:grid-cols-2 gap-6 py-4">
-            <div className="space-y-4">
-              <img 
-                src={buildingImage} 
-                alt="Healthcare Building" 
-                className="rounded-lg w-full h-auto shadow-md"
-              />
-              <h3 className="text-xl font-semibold">Our Approach</h3>
-              <p className="text-muted-foreground">
-                We combine cutting-edge technology with evidence-based design principles to create healthcare facilities that are both functional and healing-oriented. Our approach ensures that every aspect of the facility supports optimal patient care and operational efficiency.
-              </p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span>Comprehensive project management from concept to completion</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span>Integration of smart building technologies</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span>Sustainable and eco-friendly design solutions</span>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Key Features</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: <Building2 className="h-5 w-5" />, text: "Modular Design" },
-                    { icon: <Wrench className="h-5 w-5" />, text: "MEP Systems" },
-                    { icon: <Shield className="h-5 w-5" />, text: "Safety Standards" },
-                    { icon: <Lightbulb className="h-5 w-5" />, text: "Smart Technology" },
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 p-3 bg-secondary/30 rounded-lg">
-                      <div className="text-primary">{item.icon}</div>
-                      <span className="text-sm font-medium">{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                <h4 className="font-semibold text-blue-800 mb-2">Project Timeline</h4>
-                <div className="space-y-3">
-                  {[
-                    { phase: "Planning", duration: "4-6 weeks" },
-                    { phase: "Design", duration: "8-12 weeks" },
-                    { phase: "Approval", duration: "4-8 weeks" },
-                    { phase: "Construction", duration: "12-18 months" },
-                  ].map((item, index) => (
-                    <div key={index} className="flex justify-between items-center pb-2 border-b border-blue-100 last:border-0">
-                      <span className="text-sm text-blue-700">{item.phase}</span>
-                      <span className="text-sm font-medium text-blue-900 bg-blue-100 px-2 py-1 rounded">{item.duration}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={activeModal === 'caring'} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-medical-teal">Our Caring Approach</DialogTitle>
-            <DialogDescription>
-              Compassionate care at the heart of everything we do
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid md:grid-cols-2 gap-6 py-4">
-            <div className="space-y-4">
-              <img 
-                src={patientImage} 
-                alt="Patient Care" 
-                className="rounded-lg w-full h-auto shadow-md"
-              />
-              <h3 className="text-xl font-semibold">Patient-Centered Care</h3>
-              <p className="text-muted-foreground">
-                Our approach to healthcare is built on the foundation of empathy, respect, and personalized attention. We believe in treating the whole person, not just the condition, and our facilities are designed to support this philosophy.
-              </p>
-            </div>
-            <div className="space-y-6">
-              <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
-                <h4 className="font-semibold text-teal-800 mb-3">Core Principles</h4>
-                <div className="space-y-3">
-                  {[
-                    { icon: <Heart className="h-4 w-4" />, text: "Dignity and respect for all patients" },
-                    { icon: <Users className="h-4 w-4" />, text: "Family involvement in care" },
-                    { icon: <Activity className="h-4 w-4" />, text: "Holistic treatment approaches" },
-                    { icon: <Shield className="h-4 w-4" />, text: "Safe and comfortable environments" },
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-start gap-2">
-                      <div className="text-teal-500 mt-0.5">{item.icon}</div>
-                      <span className="text-sm text-teal-900">{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="p-4 bg-white rounded-lg border shadow-sm">
-                <h4 className="font-semibold mb-3">Our Commitment</h4>
-                <p className="text-sm text-muted-foreground">
-                  We are committed to creating healing environments that support both patients and their families. Our facilities incorporate natural light, soothing colors, and quiet spaces to promote recovery and well-being.
-                </p>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={activeModal === 'design'} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-pink-500">Design Philosophy</DialogTitle>
-            <DialogDescription>
-              Creating spaces that heal and inspire
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid md:grid-cols-2 gap-6 py-4">
-            <div className="space-y-4">
-              <img 
-                src="/Learn About Our Design Philosophy.png" 
-                alt="Design Philosophy" 
-                className="rounded-lg w-full h-auto shadow-md object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = patientImage;
-                  e.currentTarget.onerror = null;
-                }}
-              />
-              <h3 className="text-xl font-semibold">Healing by Design</h3>
-              <p className="text-muted-foreground">
-                Our design philosophy is rooted in evidence-based principles that create environments supporting healing, reducing stress, and improving outcomes for patients, families, and staff.
-              </p>
-            </div>
-            <div className="space-y-6">
-              <div className="bg-pink-50 p-4 rounded-lg border border-pink-100">
-                <h4 className="font-semibold text-pink-800 mb-3">Design Elements</h4>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { icon: <Sun className="h-4 w-4" />, text: "Natural Light" },
-                    { icon: <TreePine className="h-4 w-4" />, text: "Biophilic Design" },
-                    { icon: <Volume2 className="h-4 w-4" />, text: "Acoustic Comfort" },
-                    { icon: <Droplets className="h-4 w-4" />, text: "Wayfinding" },
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <div className="text-pink-500">{item.icon}</div>
-                      <span className="text-sm font-medium">{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="p-4 bg-white rounded-lg border shadow-sm">
-                <h4 className="font-semibold mb-2">Design Process</h4>
-                <ol className="space-y-2 text-sm text-muted-foreground">
-                  {[
-                    "Needs Assessment",
-                    "Concept Development",
-                    "Stakeholder Review",
-                    "Design Refinement",
-                    "Implementation"
-                  ].map((step, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <span className="font-medium text-pink-500">{index + 1}.</span>
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={activeModal === 'training'} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-purple-600">Training Programs</DialogTitle>
-            <DialogDescription>
-              Advancing healthcare through education and professional development
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid md:grid-cols-2 gap-6 py-4">
-            <div className="space-y-4">
-              <img 
-                src="/hospital training.jpg" 
-                alt="Training Programs" 
-                className="rounded-lg w-full h-auto shadow-md object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = trainingImage;
-                  e.currentTarget.onerror = null;
-                }}
-              />
-              <h3 className="text-xl font-semibold">Comprehensive Learning</h3>
-              <p className="text-muted-foreground">
-                Our training programs are designed to equip healthcare professionals with the latest knowledge and practical skills needed to excel in their fields and provide exceptional patient care.
-              </p>
-            </div>
-            <div className="space-y-6">
-              <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                <h4 className="font-semibold text-purple-800 mb-3">Program Highlights</h4>
-                <ul className="space-y-3">
-                  {[
-                    "Internationally recognized certifications",
-                    "Hands-on clinical training",
-                    "Expert faculty with real-world experience",
-                    "Flexible learning options",
-                    "Career advancement opportunities"
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-purple-900">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="p-4 bg-white rounded-lg border shadow-sm">
-                <h4 className="font-semibold mb-3">Upcoming Programs</h4>
-                <div className="space-y-3">
-                  {[
-                    { name: "Advanced Cardiac Life Support", date: "October 15, 2023" },
-                    { name: "Pediatric Emergency Care", date: "November 5, 2023" },
-                    { name: "Clinical Leadership Program", date: "December 1, 2023" },
-                  ].map((item, index) => (
-                    <div key={index} className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-0">
-                      <div>
-                        <h5 className="font-medium text-sm">{item.name}</h5>
-                        <p className="text-xs text-muted-foreground">{item.date}</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        Register
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
       
-      {/* Floating Contact Menu */}
-      {isScrolled && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-          {isOpen && (
-            <div className="flex flex-col gap-3 mb-3 items-end animate-fade-in-up">
-              {contactMethods.map((method) => (
-                <a
-                  key={method.name}
-                  href={method.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${method.color} text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 transform hover:scale-105`}
-                  aria-label={method.name}
-                >
-                  <span className="hidden sm:inline-block">{method.text}</span>
-                  {method.icon}
-                </a>
-              ))}
-            </div>
-          )}
-          
-          <button
-            onClick={toggleMenu}
-            className={`${isOpen ? 'bg-primary rotate-180' : 'bg-gradient-to-r from-primary to-medical-teal'} text-white rounded-full p-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110`}
-            aria-label={isOpen ? 'Close contact menu' : 'Contact us'}
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16 max-w-4xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 bg-primary/10 text-primary px-6 py-2.5 rounded-full mb-6 shadow-sm border border-primary/10"
           >
-            {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-          </button>
+            <span className="font-medium text-sm tracking-wide">OUR FOUNDATION</span>
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-2xl sm:text-3xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80"
+          >
+            Our Core Pillars
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg text-muted-foreground"
+          >
+            Discover the fundamental principles that drive our healthcare consulting services
+          </motion.p>
         </div>
-      )}
-    </>
+
+        <div className="grid gap-8 md:grid-cols-2">
+          {orderedPillars.map((pillar, index) => {
+            const config = pillarConfig[pillar.slug as keyof typeof pillarConfig] || {
+              bgColor: 'bg-primary',
+              textColor: 'text-primary',
+              image: '/placeholder.svg',
+              alt: pillar.title
+            };
+            const { bgColor, textColor, image, alt } = config;
+            
+            return (
+              <motion.div 
+                key={pillar.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="group bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-xl hover:border-transparent flex flex-col h-full"
+              >
+                {/* Card Image */}
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src={image} 
+                    alt={alt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder.svg';
+                    }}
+                  />
+                </div>
+                
+                {/* Solid Accent */}
+                <div className={`h-1.5 ${bgColor}`}></div>
+                
+                {/* Card Content */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex items-start justify-between mb-5">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2.5 rounded-xl ${bgColor} text-white shadow-md group-hover:scale-110 transition-transform`}>
+                        {pillar.slug === 'building' && <Building2 className="h-6 w-6" />}
+                        {pillar.slug === 'caring' && <Heart className="h-6 w-6" />}
+                        {pillar.slug === 'education' && <GraduationCap className="h-6 w-6" />}
+                        {pillar.slug === 'excellence' && <Award className="h-6 w-6" />}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900">{pillar.title}</h3>
+                    </div>
+                    <span className={`px-3 py-1 text-xs font-medium rounded-full ${bgColor}/10 ${textColor}`}>
+                      {pillar.slug.toUpperCase()}
+                    </span>
+                  </div>
+                  
+                  <div className="flex-1 mb-6">
+                    <p className="text-gray-600 mb-5 leading-relaxed">{pillar.shortDescription}</p>
+                    
+                    {pillar.highlights && pillar.highlights.length > 0 && (
+                      <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <h4 className="font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${bgColor}`}></span>
+                          Key Benefits
+                        </h4>
+                        <ul className="space-y-2.5">
+                          {pillar.highlights.map((highlight, idx) => (
+                            <motion.li 
+                              key={idx}
+                              className="flex items-start gap-2.5 group/item"
+                              whileHover={{ x: 3 }}
+                              transition={{ type: "spring", stiffness: 300 }}
+                            >
+                              <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                              <span className="text-sm text-gray-600">{highlight}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {pillar.quickPeek && pillar.quickPeek.length > 0 && (
+                      <div className="mb-6">
+                        <h4 className="font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${bgColor}`}></span>
+                          What We Offer
+                        </h4>
+                        <div className="grid gap-2.5">
+                          {pillar.quickPeek.map((item, idx) => (
+                            <motion.div 
+                              key={idx}
+                              className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-100 hover:border-primary/20 hover:shadow-sm transition-all group/feature"
+                              whileHover={{ scale: 1.01 }}
+                            >
+                              <div className={`p-2 rounded-lg ${bgColor}/10 ${textColor} group-hover/feature:rotate-6 transition-transform`}>
+                                {getIconComponent(item.icon)}
+                              </div>
+                              <div>
+                                <p className="font-semibold text-sm text-gray-800">{item.title}</p>
+                                <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Button at the bottom of the card */}
+                  <div className="mt-auto pt-4">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleGetStarted(pillar.slug);
+                      }}
+                      className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-300 flex items-center justify-center
+                        ${pillar.slug === 'caring' ? 'bg-pink-500 hover:bg-pink-600' : 
+                          pillar.slug === 'education' ? 'bg-blue-500 hover:bg-blue-600' : 
+                          pillar.slug === 'building' ? 'bg-green-500 hover:bg-green-600' : 
+                          'bg-purple-500 hover:bg-purple-600'}
+                        shadow-md hover:shadow-lg`}
+                    >
+                      Get Started with {pillar.title}
+                      <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Floating Contact Buttons */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
+        {isContactOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="flex flex-col gap-3 mb-3 items-end"
+          >
+            <a
+              href="mailto:info@valuemedhealthcare.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 transform hover:scale-105"
+              aria-label="Email"
+            >
+              <span className="hidden sm:inline-block">Email Us</span>
+              <Mail className="h-5 w-5" />
+            </a>
+            <a
+              href="tel:+919701876584"
+              className="bg-green-500 hover:bg-green-600 text-white rounded-full px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 transform hover:scale-105"
+              aria-label="Call Us"
+            >
+              <span className="hidden sm:inline-block">Call Us</span>
+              <Phone className="h-5 w-5" />
+            </a>
+            <a
+              href="https://wa.me/919701876584"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 hover:bg-green-700 text-white rounded-full px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 transform hover:scale-105"
+              aria-label="WhatsApp"
+            >
+              <span className="hidden sm:inline-block">WhatsApp</span>
+              <MessageCircle className="h-5 w-5" />
+            </a>
+          </motion.div>
+        )}
+        
+        <button
+          onClick={toggleContact}
+          className="bg-primary text-white rounded-full p-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110"
+          aria-label={isContactOpen ? 'Close contact menu' : 'Contact us'}
+        >
+          {isContactOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        </button>
+      </div>
+    </section>
   );
 };
 

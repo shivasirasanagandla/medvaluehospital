@@ -40,6 +40,7 @@ export const pillars: Pillar[] = [
       { icon: 'wrench', title: 'Integrated MEP + BioMed', desc: 'Seamless engineering with medical equipment planning and room templates.' },
       { icon: 'cpu', title: 'Digital Health Infra', desc: 'IT backbone, EMR readiness, IoT & monitoring designed into the facility.' },
       { icon: 'shield', title: 'Compliance Pathway', desc: 'Local codes and accreditation mapped to milestones for smooth approvals.' },
+      { icon: 'leaf', title: 'Sustainable Design', desc: 'Eco-friendly solutions and energy-efficient systems for green healthcare facilities.' },
     ],
     intro:
       "We partner with promoters and clinicians to plan, design, and deliver compliant, scalable and future‑ready healthcare facilities. Our approach balances evidence‑based design, operational efficiency, and capital discipline.",
@@ -97,6 +98,7 @@ export const pillars: Pillar[] = [
       { icon: 'shield', title: 'Privacy & Safety', desc: 'Dignity-first layouts and protocols aligned to global safety standards.' },
       { icon: 'sun', title: 'Healing Environments', desc: 'Natural light, acoustics, and materials tuned for calm and recovery.' },
       { icon: 'users', title: 'Family-Centered Care', desc: 'Inclusive spaces that support families and caregivers across journeys.' },
+      { icon: 'heart', title: 'Patient Advocacy', desc: 'Dedicated support to ensure patient voices are heard and respected.' },
     ],
     intro:
       "Caring is our philosophy made practical — environments, processes, and teams designed to preserve dignity and deliver superior outcomes. We infuse patient experience into workflows, spaces, and service design.",
@@ -175,6 +177,8 @@ export const pillars: Pillar[] = [
       { icon: 'check', title: 'Exam Strategy', desc: 'Mentorship, mock exams, and feedback loops tailored to your specialty.' },
       { icon: 'activity', title: 'Skills Workshops', desc: 'Simulation-based practice and focused bootcamps where applicable.' },
       { icon: 'stethoscope', title: 'Career Tracks', desc: 'Structured tracks mapped to competencies and real-world practice.' },
+      { icon: 'users', title: 'Faculty Development', desc: 'Specialized training for educators to enhance teaching methodologies.' },
+      { icon: 'award', title: 'Certification Support', desc: 'Comprehensive assistance with documentation and accreditation processes.' },
     ],
     intro:
       "We enable clinicians to pursue globally recognized qualifications and modern competencies. From foundational guidance to exam strategy and hands‑on skills, we help build careers that elevate care quality.",

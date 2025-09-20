@@ -197,7 +197,7 @@ const HomeShowcase = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.5, duration: 0.6 }}
                         >
-                          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary text-center px-4">ValueMed Healthcare Solutions</h3>
+                          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary text-center px-4">ValueMed Healthcare</h3>
                           <p className="text-muted-foreground mt-2 text-sm sm:text-base">From Vision to Commission</p>
                         </motion.div>
                       </motion.div>

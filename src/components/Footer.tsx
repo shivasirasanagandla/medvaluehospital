@@ -56,7 +56,7 @@ const Footer = () => {
                 <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-teal-400 bg-clip-text text-transparent">
                   ValueMed
                 </h1>
-                <p className="text-sm sm:text-base text-white/70 mt-1">Healthcare Solutions</p>
+                <p className="text-sm sm:text-base text-white/70 mt-1">Healthcare</p>
               </div>
             </div>
             
@@ -186,7 +186,7 @@ const Footer = () => {
         <div className="border-t border-white/10 pt-6 sm:pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center">
             <p className="text-xs sm:text-sm text-white/50">
-              © {currentYear} ValueMed Healthcare Solutions. All rights reserved.
+              © {currentYear} ValueMed Healthcare. All rights reserved.
             </p>
             <div className="flex items-center justify-center gap-6 text-xs sm:text-sm">
               <a href="#" className="text-white/60 hover:text-white transition-colors">

@@ -45,7 +45,28 @@ const App = () => (
       <SmoothScrollBehavior />
       <BrowserRouter>
         <ScrollToTop />
-        <div className="min-h-screen w-full overflow-x-hidden">
+        <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-blue-50 via-white to-teal-50 relative">
+          {/* Subtle background pattern */}
+          <div 
+            className="fixed inset-0 z-0 opacity-20 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, #0ea5e9 1px, transparent 0)',
+              backgroundSize: '40px 40px',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }} 
+          />
+          <div 
+            className="fixed inset-0 z-0 bg-gradient-to-br from-blue-50/80 via-white/80 to-teal-50/80 pointer-events-none"
+            style={{
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }}
+          />
+          {/* Main content wrapper */}
+          <div className="relative z-10 w-full max-w-[100vw] overflow-x-hidden">
           <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/start-building" element={<StartBuilding />} />
@@ -57,6 +78,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </div>
         </div>
       </BrowserRouter>
     </TooltipProvider>

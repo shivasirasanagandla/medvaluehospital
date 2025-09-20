@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Globe, Send, Building2, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import GoogleMap from "./GoogleMap";
 
@@ -19,6 +19,38 @@ interface FormData {
 }
 
 const Contact = () => {
+  // Scroll to contact section when component mounts or when hash changes
+  React.useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#contact') {
+        const scrollToContact = () => {
+          const contactSection = document.getElementById('contact');
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+            // Clean up the URL after scrolling
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        };
+        
+        // Small delay to ensure the component is fully rendered
+        const timer = setTimeout(() => {
+          scrollToContact();
+        }, 50);
+        
+        return () => clearTimeout(timer);
+      }
+    };
+
+    // Handle initial load
+    handleHashChange();
+
+    // Add hash change listener
+    window.addEventListener('hashchange', handleHashChange);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -73,7 +105,7 @@ const Contact = () => {
     <section id="contact" className="min-h-screen py-12 md:py-20 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 px-4">
+          <h2 className="text-lg sm:text-xl font-normal mb-4 px-4">
             Let's Build the Future of Healthcare – Together
           </h2>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
@@ -85,43 +117,10 @@ const Contact = () => {
           {/* Contact Information */}
           <div className="animate-fade-in">
             <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
-              <p className="text-muted-foreground mb-8 leading-relaxed">
-                With over 25 years of healthcare expertise, we're here to help you navigate every step of your healthcare project journey. From initial feasibility to final commissioning, we're your trusted partner.
-              </p>
+              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
             </div>
 
             <div className="space-y-6">
-              <div className="space-y-4">
-                <a 
-                  href={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="block hover:no-underline"
-                >
-                  <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-primary/20">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/10 p-2 sm:p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
-                        <MapPin className="h-6 w-6 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start">
-                          <h4 className="font-semibold text-lg mb-2 text-foreground">Our Location</h4>
-                          <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors mt-1" />
-                        </div>
-                        <p className="text-muted-foreground group-hover:text-foreground transition-colors">
-                          {ADDRESS}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </a>
-                {/* Map */}
-                <div className="overflow-hidden rounded-lg border shadow-sm h-64 md:h-80">
-                  <GoogleMap className="w-full h-full" />
-                </div>
-              </div>
-
               <a href="tel:+919701876584" className="block hover:no-underline">
                 <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-medical-teal/20">
                   <div className="flex items-start gap-4">
@@ -163,6 +162,37 @@ const Contact = () => {
                   </div>
                 </Card>
               </a>
+
+              <div className="space-y-4">
+                <a 
+                  href={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block hover:no-underline"
+                >
+                  <Card className="p-6 hover:shadow-card transition-all duration-300 group hover:ring-2 hover:ring-primary/20">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-primary/10 p-2 sm:p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
+                        <MapPin className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start">
+                          <h4 className="font-semibold text-lg mb-2 text-foreground">Our Location</h4>
+                          <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors mt-1" />
+                        </div>
+                        <p className="text-muted-foreground group-hover:text-foreground transition-colors">
+                          {ADDRESS}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </a>
+                {/* Map */}
+                <div className="overflow-hidden rounded-lg border shadow-sm h-64 md:h-80">
+                  <GoogleMap className="w-full h-full" />
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -283,13 +313,16 @@ const Contact = () => {
 
         {/* CTA Banner */}
         <div className="mt-16 bg-gradient-hero text-white rounded-2xl p-8 text-center">
-          <h3 className="text-3xl font-bold mb-4">Ready to Start Your Healthcare Journey?</h3>
+          <h3 className="text-xl font-normal mb-4">Ready to Start Your Healthcare Journey?</h3>
           <p className="text-xl text-white/90 mb-6 max-w-2xl mx-auto">
-            Join 100+ successful healthcare projects that have trusted ValueMed Healthcare Solutions
+            Join 100+ successful healthcare projects that have trusted ValueMed Healthcare
           </p>
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8">
+          <a 
+            href="mailto:info@valuemedhealthcare.com" 
+            className="inline-flex items-center justify-center bg-white text-primary hover:bg-white/90 text-lg px-8 py-3 rounded-md font-medium transition-colors"
+          >
             Schedule a Consultation
-          </Button>
+          </a>
         </div>
       </div>
     </section>

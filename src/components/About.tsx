@@ -31,7 +31,7 @@ const About = () => {
             
             <div className="prose prose-lg mb-8">
               <p className="text-muted-foreground leading-relaxed mb-6">
-                At Value Med Healthcare Solutions, we specialize in building healthcare institutions that combine clinical excellence, regulatory compliance, and operational efficiency. From single-specialty clinics to tertiary-care hospitals, our team provides integrated, end-to-end consulting solutions that bring your healthcare vision to life.
+                At Value Med Healthcare, we specialize in building healthcare institutions that combine clinical excellence, regulatory compliance, and operational efficiency. From single-specialty clinics to tertiary-care hospitals, our team provides integrated, end-to-end consulting that brings your healthcare vision to life.
               </p>
               
               <p className="text-muted-foreground leading-relaxed">
